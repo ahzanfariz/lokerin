@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.sqflite_crud_flutter">
+    package="com.example.lokerin">
    <application
         android:label="LOKERIN"
         android:name="${applicationName}"

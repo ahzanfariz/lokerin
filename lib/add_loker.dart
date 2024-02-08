@@ -1,29 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:sqflite_crud_flutter/model.dart';
-import 'package:sqflite_crud_flutter/my_database.dart';
-import 'package:sqflite_crud_flutter/employee.dart';
-import 'package:sqflite_crud_flutter/home.dart';
-import 'package:sqflite_crud_flutter/service.dart';
-import 'package:sqflite_crud_flutter/show_qr_transfer.dart';
 
-class AddEmployee extends StatefulWidget {
-  // final MyDatabase myDatabase;
-  // const AddEmployee({super.key, required this.myDatabase});
+import './model.dart';
+import './home.dart';
+import './service.dart';
+import './show_qr_transfer.dart';
 
+class AddLoker extends StatefulWidget {
   @override
-  State<AddEmployee> createState() => _AddEmployeeState();
+  State<AddLoker> createState() => _AddLokerState();
 }
 
-class _AddEmployeeState extends State<AddEmployee> {
+class _AddLokerState extends State<AddLoker> {
   //
-  bool isFemale = false;
+  bool isTransfer = false;
   final _formKey = GlobalKey<FormState>();
   final FocusNode _focusNode = FocusNode();
   final TextEditingController idController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
-  final TextEditingController designationController = TextEditingController();
+  final TextEditingController noLokerController = TextEditingController();
   final LokerService lokerService =
-      LokerService(baseUrl: 'http://192.168.197.46/uas_pm');
+      LokerService(baseUrl: 'http://192.168.197.46/lokerin');
   //
   @override
   Widget build(BuildContext context) {
@@ -59,7 +55,6 @@ class _AddEmployeeState extends State<AddEmployee> {
               child: Column(
                 children: [
                   const SizedBox(height: 10),
-                  // Emp Id
                   TextFormField(
                     controller: idController,
                     focusNode: _focusNode,
@@ -75,7 +70,6 @@ class _AddEmployeeState extends State<AddEmployee> {
                     },
                   ),
                   const SizedBox(height: 10),
-                  // Emp Name
                   TextFormField(
                     controller: nameController,
                     decoration: const InputDecoration(
@@ -89,9 +83,8 @@ class _AddEmployeeState extends State<AddEmployee> {
                     },
                   ),
                   const SizedBox(height: 10),
-                  // Emp Designation
                   TextFormField(
-                    controller: designationController,
+                    controller: noLokerController,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       hintText: 'Nomor Loker',
@@ -104,7 +97,6 @@ class _AddEmployeeState extends State<AddEmployee> {
                     },
                   ),
                   const SizedBox(height: 20),
-                  // Emp Gender
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -126,26 +118,26 @@ class _AddEmployeeState extends State<AddEmployee> {
                           Text(
                             'Cash',
                             style: TextStyle(
-                              fontWeight: isFemale
+                              fontWeight: isTransfer
                                   ? FontWeight.normal
                                   : FontWeight.bold,
-                              color: isFemale ? Colors.grey : Colors.blue,
+                              color: isTransfer ? Colors.grey : Colors.blue,
                             ),
                           ),
                           const SizedBox(width: 3),
                           Icon(
                             Icons.handshake,
-                            color: isFemale ? Colors.grey : Colors.blue,
+                            color: isTransfer ? Colors.grey : Colors.blue,
                           ),
                         ],
                       ),
                       const SizedBox(width: 10),
                       Switch(
-                          value: isFemale,
+                          value: isTransfer,
                           onChanged: (newValue) {
                             //
                             setState(() {
-                              isFemale = newValue;
+                              isTransfer = newValue;
                             });
                             //
                           }),
@@ -155,16 +147,16 @@ class _AddEmployeeState extends State<AddEmployee> {
                           Text(
                             'Transfer',
                             style: TextStyle(
-                              fontWeight: isFemale
+                              fontWeight: isTransfer
                                   ? FontWeight.bold
                                   : FontWeight.normal,
-                              color: isFemale ? Colors.pink : Colors.grey,
+                              color: isTransfer ? Colors.pink : Colors.grey,
                             ),
                           ),
                           const SizedBox(width: 3),
                           Icon(
                             Icons.credit_card_outlined,
-                            color: isFemale ? Colors.pink : Colors.grey,
+                            color: isTransfer ? Colors.pink : Colors.grey,
                           ),
                         ],
                       ),
@@ -190,8 +182,8 @@ class _AddEmployeeState extends State<AddEmployee> {
                                     //
                                     idController.text = '';
                                     nameController.text = '';
-                                    designationController.text = '';
-                                    isFemale = false;
+                                    noLokerController.text = '';
+                                    isTransfer = false;
                                     setState(() {});
                                     _focusNode.requestFocus();
                                     //
@@ -235,16 +227,16 @@ class _AddEmployeeState extends State<AddEmployee> {
     _formKey.currentState?.save();
 
     LokerData lokerData = LokerData(
-      idEvent: 0,
-      name: nameController.text,
-      category: designationController.text,
-      dateTime: "",
-      description: isFemale ? "Transfer" : "Cash",
-      price: 0,
-      venue: idController.text,
+      id: 0,
+      nama: nameController.text,
+      noLoker: noLokerController.text,
+      tanggal: "",
+      metodePembayaran: isTransfer ? "Transfer" : "Cash",
+      status: 0,
+      idLoker: idController.text,
     );
     lokerService.createLoker(lokerData).then((_) {
-      if (isFemale) {
+      if (isTransfer) {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -254,7 +246,7 @@ class _AddEmployeeState extends State<AddEmployee> {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: Colors.greenAccent,
             content: Text(
-              'Sewa Loker ${lokerData.name} #${lokerData.venue} berhasil ditambahkan.',
+              'Sewa Loker ${lokerData.nama} #${lokerData.idLoker} berhasil ditambahkan.',
               style: TextStyle(color: Colors.black),
             )));
         Navigator.pushAndRemoveUntil(

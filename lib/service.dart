@@ -1,8 +1,8 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
+
 import './loker_response.dart';
-import 'model.dart';
+import './model.dart';
 
 class LokerService {
   final String baseUrl;
@@ -39,12 +39,12 @@ class LokerService {
           contentType: Headers.formUrlEncodedContentType,
         ),
         data: {
-          'nama': loker.name,
-          'kategori': loker.category,
-          'waktu': loker.dateTime,
-          'tempat': loker.venue,
-          'deskripsi': loker.description,
-          'harga': loker.price,
+          'nama': loker.nama,
+          'noLoker': loker.noLoker,
+          'tanggal': loker.tanggal,
+          'idLoker': loker.idLoker,
+          'metodePembayaran': loker.metodePembayaran,
+          'status': loker.status,
         },
       );
       print(response);
@@ -58,7 +58,7 @@ class LokerService {
     }
   }
 
-  Future<void> updateLoker(int lokerID, LokerData event) async {
+  Future<void> updateLoker(int lokerID, LokerData loker) async {
     _dio.options
       ..baseUrl = baseUrl
       ..headers = {
@@ -72,13 +72,13 @@ class LokerService {
           contentType: Headers.formUrlEncodedContentType,
         ),
         data: {
-          'id_event': lokerID,
-          'nama': event.name,
-          'kategori': event.category,
-          'waktu': event.dateTime,
-          'tempat': event.venue,
-          'deskripsi': event.description,
-          'harga': event.price,
+          'id': lokerID,
+          'nama': loker.nama,
+          'noLoker': loker.noLoker,
+          'tanggal': loker.tanggal,
+          'idLoker': loker.idLoker,
+          'metodePembayaran': loker.metodePembayaran,
+          'status': loker.status,
         },
       );
       print(response);
@@ -108,7 +108,7 @@ class LokerService {
           contentType: Headers.formUrlEncodedContentType,
         ),
         data: {
-          'id_event': lokerID,
+          'id': lokerID,
         },
       );
       print(response);
@@ -119,34 +119,6 @@ class LokerService {
       }
     } catch (error) {
       throw Exception('Failed to delete data: $error');
-    }
-  }
-
-  Future<List<LokerData>> searchLoker(String cari) async {
-    _dio.options
-      ..baseUrl = baseUrl
-      ..headers = {
-        HttpHeaders.userAgentHeader: 'dio',
-        HttpHeaders.acceptHeader: 'application/json',
-      };
-    try {
-      print(cari);
-
-      final response = await _dio.get(
-        '/search.php?keyword=$cari',
-        options: Options(
-          contentType: Headers.formUrlEncodedContentType,
-        ),
-      );
-      print(response);
-      if (response.statusCode == 200) {
-        print('Data search successfully: ${response.data}');
-        return LokerResponse.fromJson(response.data).data;
-      } else {
-        throw Exception('Failed to search data: ${response.statusCode}');
-      }
-    } catch (error) {
-      throw Exception('Failed to search data: $error');
     }
   }
 }

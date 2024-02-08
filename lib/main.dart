@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sqflite_crud_flutter/home.dart';
-import 'package:sqflite_crud_flutter/style.dart';
+
+import './home.dart';
+import './style.dart';
 
 void main() {
   runApp(const MyApp());

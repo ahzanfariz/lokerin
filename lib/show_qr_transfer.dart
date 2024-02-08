@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:sqflite_crud_flutter/home.dart';
-import 'package:sqflite_crud_flutter/model.dart';
-import 'package:sqflite_crud_flutter/style.dart';
+
+import './home.dart';
+import './model.dart';
+import './style.dart';
 
 class ShowQRtransfer extends StatefulWidget {
   LokerData lokerData;
@@ -24,7 +25,7 @@ class _ShowQRtransferState extends State<ShowQRtransfer> {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       backgroundColor: Colors.greenAccent,
                       content: Text(
-                        'Silakan lakukan konfirmasi Sewa Loker ${widget.lokerData.name} #${widget.lokerData.venue}.',
+                        'Silakan lakukan konfirmasi Sewa Loker ${widget.lokerData.nama} #${widget.lokerData.idLoker}.',
                         style: TextStyle(color: Colors.black),
                       )));
                   Navigator.pushAndRemoveUntil(
@@ -62,7 +63,7 @@ class _ShowQRtransferState extends State<ShowQRtransfer> {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   backgroundColor: Colors.greenAccent,
                   content: Text(
-                    'Silakan lakukan konfirmasi Sewa Loker ${widget.lokerData.name} #${widget.lokerData.venue}.',
+                    'Silakan lakukan konfirmasi Sewa Loker ${widget.lokerData.nama} #${widget.lokerData.idLoker}.',
                     style: TextStyle(color: Colors.black),
                   )));
               Navigator.pushAndRemoveUntil(
@@ -84,7 +85,7 @@ class _ShowQRtransferState extends State<ShowQRtransfer> {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   backgroundColor: Colors.greenAccent,
                   content: Text(
-                    'Silakan lakukan konfirmasi Sewa Loker ${widget.lokerData.name} #${widget.lokerData.venue}.',
+                    'Silakan lakukan konfirmasi Sewa Loker ${widget.lokerData.nama} #${widget.lokerData.idLoker}.',
                     style: TextStyle(color: Colors.black),
                   )));
               Navigator.pushAndRemoveUntil(

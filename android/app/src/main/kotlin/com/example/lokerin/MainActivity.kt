@@ -1,4 +1,4 @@
-package com.example.sqflite_crud_flutter
+package com.example.lokerin
 
 import io.flutter.embedding.android.FlutterActivity
 

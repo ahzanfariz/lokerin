@@ -1,31 +1,30 @@
 class LokerData {
-  final int idEvent;
-  final String name;
-  final String category;
-  final String dateTime;
-  final String venue;
-  final String description;
-  final int price;
+  final int id;
+  final String nama;
+  final String noLoker;
+  final String tanggal;
+  final String idLoker;
+  final String metodePembayaran;
+  final int status;
 
-  LokerData({
-    required this.idEvent,
-    required this.name,
-    required this.category,
-    required this.dateTime,
-    required this.venue,
-    required this.description,
-    required this.price,
-  });
+  LokerData(
+      {required this.id,
+      required this.nama,
+      required this.noLoker,
+      required this.tanggal,
+      required this.idLoker,
+      required this.metodePembayaran,
+      required this.status});
 
   factory LokerData.fromJson(Map<String, dynamic> json) {
     return LokerData(
-      idEvent: int.parse(json['id_event']),
-      name: json['nama'],
-      category: json['kategori'],
-      dateTime: json['waktu'],
-      venue: json['tempat'],
-      description: json['deskripsi'],
-      price: int.parse(json['harga']),
+      id: int.parse(json['id']),
+      nama: json['nama'],
+      noLoker: json['noLoker'],
+      tanggal: json['tanggal'],
+      idLoker: json['idLoker'],
+      metodePembayaran: json['metodePembayaran'],
+      status: int.parse(json['status']),
     );
   }
 }

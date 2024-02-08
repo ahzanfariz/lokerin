@@ -1,30 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:sqflite_crud_flutter/employee.dart';
-import 'package:sqflite_crud_flutter/model.dart';
-import 'package:sqflite_crud_flutter/my_database.dart';
-import 'package:sqflite_crud_flutter/service.dart';
-import 'package:sqflite_crud_flutter/show_qr_transfer.dart';
 
-import 'home.dart';
+import './model.dart';
+import './service.dart';
+import './show_qr_transfer.dart';
+import './home.dart';
 
-class EditEmployee extends StatefulWidget {
-  const EditEmployee({super.key, required this.employee});
-  final LokerData employee;
+class EditLoker extends StatefulWidget {
+  final LokerData loker;
+  const EditLoker({super.key, required this.loker});
 
   @override
-  State<EditEmployee> createState() => _EditEmployeeState();
+  State<EditLoker> createState() => _EditLokerState();
 }
 
-class _EditEmployeeState extends State<EditEmployee> {
+class _EditLokerState extends State<EditLoker> {
   //
-  bool isFemale = false;
+  bool isTransfer = false;
   final _formKey = GlobalKey<FormState>();
   final FocusNode _focusNode = FocusNode();
   final TextEditingController idController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
-  final TextEditingController designationController = TextEditingController();
+  final TextEditingController noLokerController = TextEditingController();
   final LokerService lokerService =
-      LokerService(baseUrl: 'http://192.168.197.46/uas_pm');
+      LokerService(baseUrl: 'http://192.168.197.46/lokerin');
   //
 
   @override
@@ -32,10 +30,10 @@ class _EditEmployeeState extends State<EditEmployee> {
     // TODO: implement initState
     super.initState();
     //
-    idController.text = widget.employee.venue;
-    nameController.text = widget.employee.name;
-    designationController.text = widget.employee.category;
-    isFemale = widget.employee.description == "Cash" ? false : true;
+    idController.text = widget.loker.idLoker;
+    nameController.text = widget.loker.nama;
+    noLokerController.text = widget.loker.noLoker;
+    isTransfer = widget.loker.metodePembayaran == "Cash" ? false : true;
   }
 
   @override
@@ -70,7 +68,6 @@ class _EditEmployeeState extends State<EditEmployee> {
               child: Column(
                 children: [
                   const SizedBox(height: 10),
-                  // Emp Id
                   TextFormField(
                     controller: idController,
                     focusNode: _focusNode,
@@ -86,7 +83,6 @@ class _EditEmployeeState extends State<EditEmployee> {
                     },
                   ),
                   const SizedBox(height: 10),
-                  // Emp Name
                   TextFormField(
                     controller: nameController,
                     decoration: const InputDecoration(
@@ -100,9 +96,8 @@ class _EditEmployeeState extends State<EditEmployee> {
                     },
                   ),
                   const SizedBox(height: 10),
-                  // Emp Designation
                   TextFormField(
-                    controller: designationController,
+                    controller: noLokerController,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       hintText: 'Nomor Loker',
@@ -136,26 +131,26 @@ class _EditEmployeeState extends State<EditEmployee> {
                           Text(
                             'Cash',
                             style: TextStyle(
-                              fontWeight: isFemale
+                              fontWeight: isTransfer
                                   ? FontWeight.normal
                                   : FontWeight.bold,
-                              color: isFemale ? Colors.grey : Colors.blue,
+                              color: isTransfer ? Colors.grey : Colors.blue,
                             ),
                           ),
                           const SizedBox(width: 3),
                           Icon(
                             Icons.handshake,
-                            color: isFemale ? Colors.grey : Colors.blue,
+                            color: isTransfer ? Colors.grey : Colors.blue,
                           ),
                         ],
                       ),
                       const SizedBox(width: 10),
                       Switch(
-                          value: isFemale,
+                          value: isTransfer,
                           onChanged: (newValue) {
                             //
                             setState(() {
-                              isFemale = newValue;
+                              isTransfer = newValue;
                             });
                             //
                           }),
@@ -165,16 +160,16 @@ class _EditEmployeeState extends State<EditEmployee> {
                           Text(
                             'Transfer',
                             style: TextStyle(
-                              fontWeight: isFemale
+                              fontWeight: isTransfer
                                   ? FontWeight.bold
                                   : FontWeight.normal,
-                              color: isFemale ? Colors.pink : Colors.grey,
+                              color: isTransfer ? Colors.pink : Colors.grey,
                             ),
                           ),
                           const SizedBox(width: 3),
                           Icon(
                             Icons.credit_card_outlined,
-                            color: isFemale ? Colors.pink : Colors.grey,
+                            color: isTransfer ? Colors.pink : Colors.grey,
                           ),
                         ],
                       ),
@@ -216,17 +211,17 @@ class _EditEmployeeState extends State<EditEmployee> {
     _formKey.currentState?.save();
 
     LokerData lokerData = LokerData(
-      idEvent: 0,
-      name: nameController.text,
-      category: designationController.text,
-      dateTime: "",
-      description: isFemale ? "Transfer" : "Cash",
-      price: isFemale ? 0 : widget.employee.price,
-      venue: idController.text,
+      id: 0,
+      nama: nameController.text,
+      noLoker: noLokerController.text,
+      tanggal: "",
+      metodePembayaran: isTransfer ? "Transfer" : "Cash",
+      status: isTransfer ? 0 : widget.loker.status,
+      idLoker: idController.text,
     );
 
-    lokerService.updateLoker(widget.employee.idEvent, lokerData).then((_) {
-      if (isFemale) {
+    lokerService.updateLoker(widget.loker.id, lokerData).then((_) {
+      if (isTransfer) {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -236,7 +231,7 @@ class _EditEmployeeState extends State<EditEmployee> {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: Colors.orange,
             content: Text(
-                'Loker ${lokerData.name} #${lokerData.venue} berhasil diperbarui.')));
+                'Loker ${lokerData.nama} #${lokerData.idLoker} berhasil diperbarui.')));
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
